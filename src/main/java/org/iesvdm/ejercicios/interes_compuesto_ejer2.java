@@ -8,11 +8,11 @@ public class interes_compuesto_ejer2 {
 
     public static void main(String[] args) {
 
-        BigDecimal p = new BigDecimal("30000");
+        BigDecimal p = new BigDecimal("10000.00");
 
         BigDecimal r = new BigDecimal("0.05");
 
-        BigDecimal n = new BigDecimal("2");
+        BigDecimal n = new BigDecimal("10");
 
         System.out.println("c = p(1+r)^n \nc = "+p.toString()+"(1+"+r.toString()+")^"+n.toString());
 

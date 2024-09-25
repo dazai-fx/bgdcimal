@@ -34,15 +34,19 @@ public class pagos_de_prestamo_amortizable_ejer3 {
 
         while (newBalance.compareTo(BigDecimal.ZERO) > 0) {
 
-            BigDecimal monthInterestPayment = p.multiply(r); // interes del mes = saldo pendiente x r
+            BigDecimal monthInterestPayment = p.multiply(r);// interes del mes = saldo pendiente x r
 
-            BigDecimal mainOfTheMonth = pmt.subtract(monthInterestPayment); // principal del mes = PMT - Intereses del mes
+            // principal del mes = PMT - Intereses del mes
+            BigDecimal mainOfTheMonth = pmt.subtract(monthInterestPayment);
 
             newBalance = p.subtract(mainOfTheMonth); // nuevo saldo = saldo pendiente - principal mes
 
             p=newBalance;
 
-            System.out.println(i+"\t"+pmt+"\t\t"+mainOfTheMonth.setScale(2, RoundingMode.HALF_UP)+"\t"+monthInterestPayment.setScale(2, RoundingMode.HALF_UP)+"\t"+newBalance.setScale(2, RoundingMode.HALF_UP));
+            // formateando la salida
+            System.out.println(i+"\t"+pmt+"\t\t"+mainOfTheMonth.setScale(2, RoundingMode.HALF_UP)+
+                    "\t"+monthInterestPayment.setScale(2, RoundingMode.HALF_UP)+"\t"
+                    +newBalance.setScale(2, RoundingMode.HALF_UP));
 
             i++;
 

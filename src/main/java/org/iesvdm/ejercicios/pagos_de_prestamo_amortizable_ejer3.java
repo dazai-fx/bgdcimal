@@ -9,50 +9,60 @@ public class pagos_de_prestamo_amortizable_ejer3 {
 
     public static void main(String[] args) {
 
-        BigDecimal p = new BigDecimal("200000"); // Monto original
+        BigDecimal p = new BigDecimal("200000"); // Monto de prestamo original
 
-        BigDecimal r = new BigDecimal("0.05"); // tasa de interés anual 0.05/12 para calcular la tasa anual
+        BigDecimal r = new BigDecimal("0.05"); // tasa de interés anual
 
-        int n = 30; // Número total de pagos (en meses)
+        int paymentsPerMonth = 30;
 
-        // Operaciones
+        BigDecimal mnt = calculatePMT(p,r,paymentsPerMonth);
 
-        // 1. Convertir la tasa de interés anual a mensual
+        System.out.println(mnt);
 
-        r = r.divide(new BigDecimal("12"), 10, RoundingMode.HALF_UP);
 
-        System.out.println("r = "+r.setScale(10, RoundingMode.HALF_UP)+"%");
 
-        // 2.Calcular el pago mensual (PMT)
-
-        BigDecimal numerador = p.multiply(r);
-
-        BigDecimal denominador = r.add(BigDecimal.ONE);
-
-        int exponente = n * -1;
-
-        MathContext mc = new MathContext(10, RoundingMode.HALF_UP);
-
-        denominador = BigDecimal.ONE.divide(denominador.pow(Math.abs(exponente), mc), mc);
-
-        denominador = BigDecimal.ONE.subtract(denominador);
-
-        BigDecimal pmt = numerador.divide(denominador, 2, RoundingMode.HALF_UP);
-
-        System.out.println("PMT = "+pmt); // el resultado no corresponde con el ejemplo dado algo esta mal (preguntar al profe)
-
-        
-
-        // 3. Desglosar el pago mensual en:
-
-        //BigDecimal saldoPendiente = p;
-
-        //BigDecimal interesDelMes = saldoPendiente.multiply(r);
-
-        //System.out.println(interesDelMes.setScale(2, RoundingMode.HALF_UP)+"€");
 
 
 
     }
+
+    public static BigDecimal calculateMonthlyInterestRate(BigDecimal annualRate){
+
+        //1. Tasa de interés mensual: rate = annualRate / 12
+        BigDecimal monthsInYear = new BigDecimal(12);
+        return annualRate.divide(monthsInYear, MathContext.DECIMAL128);
+    }
+
+    public static BigDecimal calculatePMT(BigDecimal p, BigDecimal annualRate, int paymentsPerMonth){
+
+        BigDecimal monthlyRate = calculateMonthlyInterestRate(annualRate); // rate as a decimal
+
+        // 2. Número total de pagos: n = years * 12
+        int totalPayments = paymentsPerMonth * 12;
+
+        // 3. (1 + r)^n
+        BigDecimal one = BigDecimal.ONE;
+
+        BigDecimal onePlusRate = one.add(monthlyRate); // (1 + r)
+
+        BigDecimal power = onePlusRate.pow(totalPayments, MathContext.DECIMAL128); // (1 + r)^n
+
+        // 4. Numerador: P * r * (1 + r)^n
+        BigDecimal numerator = p.multiply(monthlyRate).multiply(power);
+
+        // 5. Denominador: (1 + r)^n - 1
+        BigDecimal denominator = power.subtract(one);
+
+        // 6. PMT = numerador / denominador
+        BigDecimal pmt = numerator.divide(denominator, RoundingMode.HALF_UP);
+
+        return pmt.setScale(2, RoundingMode.HALF_UP); // Redondeamos a 2 decimales
+
+    }
+
+    public static BigDecimal CalculateFirstMonthInterestPayment(BigDecimal p, BigDecimal r){
+        return p;
+    }
+
 
 }

@@ -11,23 +11,46 @@ public class pagos_de_prestamo_amortizable_ejer3 {
 
         BigDecimal p = new BigDecimal("200000"); // Monto de prestamo original
 
-        BigDecimal r = new BigDecimal("0.05"); // tasa de interés anual
+        BigDecimal annualRate = new BigDecimal("0.05"); // tasa de interés anual
 
         int paymentsPerMonth = 30;
 
-        BigDecimal mnt = calculatePMT(p,r,paymentsPerMonth);
+        BigDecimal pmt = calculatePMT(p,annualRate,paymentsPerMonth);
 
-        System.out.println(mnt);
+        System.out.println("Préstamo: "+p);
 
+        System.out.println("Tasa de interés anual: "+annualRate);
 
+        System.out.println("Pago mensual: "+pmt);
 
+        BigDecimal r = calculateMonthlyInterestRate(annualRate);
 
+        BigDecimal newBalance = p;
 
+        System.out.println("Esquema de amortización" +
+                         "\n_______________________\nMes Pago\t\tPrincipal\tInterés\tBalance");
+
+        int i = 1;
+
+        while (newBalance.compareTo(BigDecimal.ZERO) > 0) {
+
+            BigDecimal monthInterestPayment = p.multiply(r); // interes del mes = saldo pendiente x r
+
+            BigDecimal mainOfTheMonth = pmt.subtract(monthInterestPayment); // principal del mes = PMT - Intereses del mes
+
+            newBalance = p.subtract(mainOfTheMonth); // nuevo saldo = saldo pendiente - principal mes
+
+            p=newBalance;
+
+            System.out.println(i+"\t"+pmt+"\t\t"+mainOfTheMonth.setScale(2, RoundingMode.HALF_UP)+"\t"+monthInterestPayment.setScale(2, RoundingMode.HALF_UP)+"\t"+newBalance.setScale(2, RoundingMode.HALF_UP));
+
+            i++;
+
+        }
 
     }
 
     public static BigDecimal calculateMonthlyInterestRate(BigDecimal annualRate){
-
         //1. Tasa de interés mensual: rate = annualRate / 12
         BigDecimal monthsInYear = new BigDecimal(12);
         return annualRate.divide(monthsInYear, MathContext.DECIMAL128);
@@ -60,9 +83,7 @@ public class pagos_de_prestamo_amortizable_ejer3 {
 
     }
 
-    public static BigDecimal CalculateFirstMonthInterestPayment(BigDecimal p, BigDecimal r){
-        return p;
-    }
+
 
 
 }

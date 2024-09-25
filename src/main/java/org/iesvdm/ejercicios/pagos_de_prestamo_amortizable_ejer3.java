@@ -41,6 +41,8 @@ public class pagos_de_prestamo_amortizable_ejer3 {
 
         System.out.println("PMT = "+pmt); // el resultado no corresponde con el ejemplo dado algo esta mal (preguntar al profe)
 
+        
+
         // 3. Desglosar el pago mensual en:
 
         //BigDecimal saldoPendiente = p;
